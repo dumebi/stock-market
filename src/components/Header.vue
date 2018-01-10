@@ -34,8 +34,8 @@
                aria-expanded="false"
                >Save & Load <span class="caret"></span></a>
             <ul class="dropdown-menu">
-              <li><a href="#">Save Data</a></li>
-              <li><a href="#">Load Data</a></li>
+              <li><a @click="saveData">Save Data</a></li>
+              <li><a @click="loadData">Load Data</a></li>
             </ul>
           </li>
         </ul>
@@ -58,11 +58,25 @@
       }
     },
     methods:{
-        ...mapActions([
-            'randomizeStocks'
-        ]),
+        ...mapActions({
+          randomizeStocks: 'randomizeStocks',
+          fetchData:'loadData'
+
+        }),
         endDay(){
             this.randomizeStocks();
+        },
+        saveData(){
+            const data = {
+                funds: this.$store.getters.funds,
+                stockPortfolio: this.$store.getters.stockPortfolio,
+                stocks: this.$store.getters.stocks
+            }
+
+            this.$http.put('data.json', data);
+        },
+        loadData(){
+          this.fetchData();
         }
     }
   }
